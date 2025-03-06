@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.SubSystems.Drive.DriveSubsystem;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -14,12 +15,13 @@ import java.util.Comparator;
 
 public class AprilTagNavigator {
 
+    private DriveSubsystem driveSubsystem;
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
     private Telemetry telemetry;
 
     // Robot motors
-    private DcMotor frontLeft, frontRight, backLeft, backRight;
+    public final DcMotor leftFront, leftBack, rightBack, rightFront;
 
     // PID tuning values (adjust as needed)
     private final double STRAFE_Kp = 0.015; // Lower for smoother movement
@@ -32,10 +34,10 @@ public class AprilTagNavigator {
         this.telemetry = telemetry;
 
         // Initialize motors
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
+        leftFront = hardwareMap.get(DcMotor.class, "frontLeft");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        leftBack = hardwareMap.get(DcMotor.class, "backLeft");
+        rightBack = hardwareMap.get(DcMotor.class, "backRight");
 
         setMotorModes();
 
@@ -48,18 +50,18 @@ public class AprilTagNavigator {
     }
 
     private void setMotorModes() {
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightBack.setDirection(DcMotor.Direction.REVERSE);
 
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public AprilTagDetection getClosestTag() {
@@ -103,10 +105,10 @@ public class AprilTagNavigator {
         double bl = forward - strafe + turn;
         double br = forward + strafe - turn;
 
-        frontLeft.setPower(Range.clip(fl, -1, 1));
-        frontRight.setPower(Range.clip(fr, -1, 1));
-        backLeft.setPower(Range.clip(bl, -1, 1));
-        backRight.setPower(Range.clip(br, -1, 1));
+        leftFront.setPower(Range.clip(fl, -1, 1));
+        rightFront.setPower(Range.clip(fr, -1, 1));
+        leftBack.setPower(Range.clip(bl, -1, 1));
+        rightBack.setPower(Range.clip(br, -1, 1));
     }
 
     public void stopRobot() {
