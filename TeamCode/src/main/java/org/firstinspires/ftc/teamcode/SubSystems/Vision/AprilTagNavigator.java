@@ -21,7 +21,7 @@ public class AprilTagNavigator {
     private Telemetry telemetry;
 
     // Robot motors
-    public final DcMotor leftFront, leftBack, rightBack, rightFront;
+    public final  DcMotor leftFront, leftBack, rightBack, rightFront;
 
     // PID tuning values (adjust as needed)
     private final double STRAFE_Kp = 0.015; // Lower for smoother movement
@@ -30,7 +30,8 @@ public class AprilTagNavigator {
 
     private final double DEADBAND = 0.5; // Ignore small errors to prevent jitter
 
-    public AprilTagNavigator(HardwareMap hardwareMap, Telemetry telemetry) {
+    public AprilTagNavigator(DriveSubsystem driveSubsystem, HardwareMap hardwareMap, Telemetry telemetry) {
+        this.driveSubsystem = driveSubsystem;
         this.telemetry = telemetry;
 
         // Initialize motors
