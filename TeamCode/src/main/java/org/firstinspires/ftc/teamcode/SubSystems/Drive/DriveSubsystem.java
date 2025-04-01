@@ -8,6 +8,11 @@ import com.qualcomm.robotcore.util.Range;
 public class DriveSubsystem {
 
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    
+    private static final double TICKS_PER_REVOLUTION = 560.0;
+    private static final double WHEEL_DIAMETER = 4.0; // inches
+    private static final double WHEEL_BASE = 16.0;    // inches between wheels
+
 
     public DriveSubsystem(HardwareMap hardwareMap) {
         // Initialize motors
