@@ -12,10 +12,19 @@ private DcmotorEX
 public void runOpMode(){
 driveSubsystem = new driveSubsystem (HardwareMap hardwareMap, Telemetry telemetry);
 driveSubsystemAuto  = new driveSubsystemAuto (HardwareMap hardwareMap, Telemetry telemetry);
+
 Wait for start();
+
+telemetry .addData(FORWARD);
+telemetry .update;
 DriveSubsystem. FORWARD (12); 
+
+telemetry .addData(forwardForDistance);
+telemetry .update;
 DriveSubsystemAuto.forwardForDistance(24, telemetry);
 
+telemetry .addData(done);
+telemetry .update;
 }
 
 

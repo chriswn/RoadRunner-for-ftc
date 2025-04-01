@@ -17,6 +17,7 @@ public class DriveSubsystemAuto {
 
     public DriveSubsystem(HardwareMap hardwareMap) {
         // Initialize motors
+        this.telemetry = telemetry; 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
@@ -41,24 +42,6 @@ public class DriveSubsystemAuto {
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
-    public void drive(double forward, double strafe, double turn) {
-        double fl = forward + strafe + turn;
-        double fr = forward - strafe - turn;
-        double bl = forward - strafe + turn;
-        double br = forward + strafe - turn;
-
-        // Clip values to avoid exceeding motor power limits
-        leftFront.setPower(Range.clip(fl, -1, 1));
-        rightFront.setPower(Range.clip(fr, -1, 1));
-        leftBack.setPower(Range.clip(bl, -1, 1));
-        rightBack.setPower(Range.clip(br, -1, 1));
-    }
-
-    public void stop() {
-        drive(0, 0, 0);
-    }
-}
 
    public void forwardForDistance(double inches) {
         resetEncoders();
@@ -146,3 +129,4 @@ public class DriveSubsystemAuto {
         rightFront.setPower(0);
         rightBack.setPower(0);
     }
+}
