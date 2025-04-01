@@ -2,20 +2,26 @@ package org.firstinspires.ftc.teamcode.SubSystems.Drive;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class DriveSubsystemAuto {
 
-    public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    public static DcMotorEx leftFront = null;
+    public static DcMotorEx leftBack = null;
+    public static DcMotorEx rightBack = null;
+    public static DcMotorEx rightFront = null;
     
     private static final double TICKS_PER_REVOLUTION = 560.0;
     private static final double WHEEL_DIAMETER = 4.0; // inches
     private static final double WHEEL_BASE = 16.0;    // inches between wheels
     private Telemetry telemetry;
-    private double wheelCircumference;
+    private static double wheelCircumference;
 
-    public DriveSubsystem(HardwareMap hardwareMap) {
+    public DriveSubsystemAuto (HardwareMap hardwareMap) {
         // Initialize motors
         this.telemetry = telemetry; 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
@@ -43,7 +49,7 @@ public class DriveSubsystemAuto {
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-   public void forwardForDistance(double inches) {
+   public static void forwardForDistance(double inches, Telemetry telemetry) {
         resetEncoders();
         int ticks = calculateTicks(inches);
         setTargetPositions(ticks);
@@ -59,6 +65,7 @@ public class DriveSubsystemAuto {
 
         stopMotors();
     }
+
 
     public void turn(int degrees, boolean clockwise) {
         double turnCircumference = Math.PI * WHEEL_BASE;
@@ -81,12 +88,12 @@ public class DriveSubsystemAuto {
         stopMotors();
     }
 
-    private int calculateTicks(double inches) {
+    private static int calculateTicks(double inches) {
         double rotations = inches / wheelCircumference;
         return (int) (rotations * TICKS_PER_REVOLUTION);
     }
 
-    private void setTargetPositions(int ticks) {
+    private static void setTargetPositions(int ticks) {
         leftFront.setTargetPosition(leftFront.getCurrentPosition() + ticks);
         leftBack.setTargetPosition(leftBack.getCurrentPosition() + ticks);
         rightFront.setTargetPosition(rightFront.getCurrentPosition() + ticks);
@@ -100,7 +107,7 @@ public class DriveSubsystemAuto {
         rightBack.setTargetPosition(rightBack.getCurrentPosition() + rightTicks);
     }
 
-    private void runMotorsToPosition(double power) {
+    private static void runMotorsToPosition(double power) {
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -112,18 +119,18 @@ public class DriveSubsystemAuto {
         rightBack.setPower(power);
     }
 
-    private void resetEncoders() {
+    private static void resetEncoders() {
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    private boolean motorsBusy() {
+    private static boolean motorsBusy() {
         return leftFront.isBusy() || leftBack.isBusy() || rightFront.isBusy() || rightBack.isBusy();
     }
 
-    public void stopMotors() {
+    public static void stopMotors() {
         leftFront.setPower(0);
         leftBack.setPower(0);
         rightFront.setPower(0);
