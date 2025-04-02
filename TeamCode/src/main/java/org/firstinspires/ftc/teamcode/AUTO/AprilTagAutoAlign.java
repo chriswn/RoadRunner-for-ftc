@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.AUTO;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -64,11 +65,17 @@ public class AprilTagAutoAlign extends LinearOpMode {
     }
 
     private void initAprilTag() {
-        aprilTag = new AprilTagProcessor.Builder().build();
+        aprilTag = new AprilTagProcessor.Builder()
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagOutline(true)
+                .build();
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(aprilTag)
                 .build();
+
+        FtcDashboard.getInstance().startCameraStream(visionPortal, 30);
     }
 
     private AprilTagDetection getClosestTag() {
